@@ -9,20 +9,18 @@ import { useForm } from "react-hook-form";
 import { useCreateCabin } from "./useCreateCabin";
 import { useEditCabin } from "./useEditCabin";
 
-function CreateCabinForm({ cabinToEdit = {},onCloseModal }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const { isCreating, createCabin } = useCreateCabin();
- const { isEditing, editCabin } = useEditCabin();
- const isWorking = isCreating || isEditing;
+  const { isEditing, editCabin } = useEditCabin();
+  const isWorking = isCreating || isEditing;
 
-  const { id: editId, ...editValue } = cabinToEdit;
+  const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
   const { register, handleSubmit, reset, getValues, formState } = useForm({
-    defaultValues: isEditSession ? editValue : {},
+    defaultValues: isEditSession ? editValues : {},
   });
 
   const { errors } = formState;
-
- 
 
   function onSubmit(data) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
@@ -54,7 +52,10 @@ function CreateCabinForm({ cabinToEdit = {},onCloseModal }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)} type={onCloseModal ? "modal":"regular"}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -96,7 +97,7 @@ function CreateCabinForm({ cabinToEdit = {},onCloseModal }) {
         />
       </FormRow>
 
-      <FormRow label="Discout" error={errors?.discount?.message}>
+      <FormRow label="Discount" error={errors?.discount?.message}>
         <Input
           type="number"
           id="discount"
@@ -129,7 +130,6 @@ function CreateCabinForm({ cabinToEdit = {},onCloseModal }) {
       <FormRow label="Cabin photo">
         <FileInput
           id="image"
-          disabled={isWorking}
           accept="image/*"
           {...register("image", {
             required: isEditSession ? false : "This field is required",
@@ -139,7 +139,11 @@ function CreateCabinForm({ cabinToEdit = {},onCloseModal }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset" onClick={()=>onCloseModal?.()}>
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>

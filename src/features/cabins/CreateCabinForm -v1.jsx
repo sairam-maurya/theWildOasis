@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
-
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
@@ -13,13 +12,13 @@ import { createCabin } from "../../services/apiCabins";
 import { useForm } from "react-hook-form";
 
 function CreateCabinForm() {
-  const queryClient = useQueryClient();
   const { register, handleSubmit, reset, getValues, formState } = useForm();
 
   const { errors } = formState;
+  const queryClient = useQueryClient();
 
   const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: (newCabin) => createCabin(newCabin),
+    mutationFn:createCabin,
     onSuccess: () => {
       toast.success("New cabin sucessfully created");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
