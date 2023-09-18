@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import Heading from "../../ui/Heading";
 import {
   Cell,
   Legend,
@@ -8,7 +8,6 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import Heading from "../../ui/Heading";
 import { useDarkMode } from "../../context/DarkModeContext";
 
 const ChartBox = styled.div`
@@ -145,7 +144,7 @@ function prepareData(startData, stays) {
 function DurationChart({ confirmedStays }) {
   const { isDarkMode } = useDarkMode();
   const startData = isDarkMode ? startDataDark : startDataLight;
- const data=  prepareData(startData,confirmedStays)
+  const data = prepareData(startData, confirmedStays);
 
   return (
     <ChartBox>
