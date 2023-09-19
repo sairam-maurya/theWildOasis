@@ -60,7 +60,7 @@ function UpdateUserDataForm() {
       </FormRow>
 
       <FormRow>
-        <Button type="reset" variation="secondary" disabled={isUpdating}
+        <Button type="reset" $variation="secondary" disabled={isUpdating}
         onClick={handleCancel}>
           Cancel
         </Button>
