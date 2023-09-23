@@ -106,7 +106,7 @@ function Toggle({ id }) {
 }
 function List({ id, children }) {
   const { openId, position, close } = useContext(MenusContext);
-  const ref = useOutsideClick(close,false);
+  const ref = useOutsideClick(close, false);
   if (openId !== id) return null;
   return createPortal(
     <StyledList position={position} ref={ref}>
@@ -116,7 +116,10 @@ function List({ id, children }) {
   );
 }
 
-function Button({ children, icon, onClick }) {
+function Button({ children, icon, onClick, confirm }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const isConfirm = confirm === "delete";
+
   const { close } = useContext(MenusContext);
 
   function handleClick() {
@@ -125,12 +128,28 @@ function Button({ children, icon, onClick }) {
   }
 
   return (
-    <li>
-      <StyledButton onClick={handleClick}>
-        {icon}
-        <span>{children}</span>
-      </StyledButton>
-    </li>
+    <>
+      {isConfirm ? (
+        <li>
+          <StyledButton
+            onClick={handleClick}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            disabled={isHovered}
+          >
+            {icon}
+            <span>{children}</span>
+          </StyledButton>
+        </li>
+      ) : (
+        <li>
+          <StyledButton onClick={handleClick}>
+            {icon}
+            <span>{children}</span>
+          </StyledButton>
+        </li>
+      )}
+    </>
   );
 }
 

@@ -18,6 +18,7 @@ import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useDeleteBookings } from "./useDeleteBooking";
 import Empty from "../../ui/Empty";
+import { useState } from "react";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -26,20 +27,19 @@ const HeadingGroup = styled.div`
 `;
 
 function BookingDetail() {
-  const {booking,isLoading} =useBooking() 
+  const [isHovered, setIsHovered] = useState(false);
+  const { booking, isLoading } = useBooking();
 
-  const {checkout,isCheckingOut}=useCheckout()
-   const { deleteBooking, isDeleting } = useDeleteBookings();
+  const { checkout, isCheckingOut } = useCheckout();
+  const { deleteBooking, isDeleting } = useDeleteBookings();
 
   const moveBack = useMoveBack();
- const navigate=useNavigate()
+  const navigate = useNavigate();
 
+  if (isLoading) return <Spinner />;
+  if (!booking) return <Empty resourceName={"booking"} />;
 
-  if(isLoading) return <Spinner/>
-  if(!booking) return <Empty resourceName={"booking"}/>
-
-  const {status, id:bookingId}=booking
-
+  const { status, id: bookingId } = booking;
 
   const statusToTagName = {
     unconfirmed: "blue",
@@ -77,17 +77,25 @@ function BookingDetail() {
         )}
 
         <Modal>
-          <Modal.Open opens='delete'>
-            <Button $variation='danger'>Delete Booking</Button>
-
+          <Modal.Open opens="delete">
+            <Button
+              $variation="danger"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              disabled={isHovered}
+            >
+              Delete Booking
+            </Button>
           </Modal.Open>
           <Modal.Window name="delete">
             <ConfirmDelete
               resourceName="booking"
               disabled={isDeleting}
-              onConfirm={() => deleteBooking(bookingId,{
-                onSettled:()=>navigate(-1)
-              })}
+              onConfirm={() =>
+                deleteBooking(bookingId, {
+                  onSettled: () => navigate(-1),
+                })
+              }
             />
           </Modal.Window>
         </Modal>
